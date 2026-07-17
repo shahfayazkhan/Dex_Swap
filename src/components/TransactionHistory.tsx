@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { ExternalLink, Clock, CheckCircle, XCircle, Loader2, ArrowRight, History } from 'lucide-react';
 
+// Fixed base time (module-level constant so it's identical on SSR and client)
+const BASE_TIME = new Date('2026-07-17T10:00:00.000Z').getTime();
+
 interface Transaction {
   id: string;
   fromSymbol: string;
@@ -25,7 +28,7 @@ const DEMO_TRANSACTIONS: Transaction[] = [
     fromAmount: '0.5',
     toAmount: '1,710.29',
     status: 'success',
-    timestamp: new Date(Date.now() - 5 * 60 * 1000),
+    timestamp: new Date(BASE_TIME - 5 * 60 * 1000),
     hash: '0x3a8f1b2c4d5e6a7b8c9d0e1f2a3b4c5d6e7f8a9b',
     network: 'EVM',
     gasUsed: '$2.14',
@@ -38,7 +41,7 @@ const DEMO_TRANSACTIONS: Transaction[] = [
     fromAmount: '2.0',
     toAmount: '14,583,329',
     status: 'success',
-    timestamp: new Date(Date.now() - 22 * 60 * 1000),
+    timestamp: new Date(BASE_TIME - 22 * 60 * 1000),
     hash: 'DRpbCKgHGg3uYpk74DhWzBwJGq1S8VsE5fNH2gDiM',
     network: 'Solana',
     gasUsed: '$0.00025',
@@ -51,7 +54,7 @@ const DEMO_TRANSACTIONS: Transaction[] = [
     fromAmount: '0.012',
     toAmount: '0.2384',
     status: 'pending',
-    timestamp: new Date(Date.now() - 2 * 60 * 1000),
+    timestamp: new Date(BASE_TIME - 2 * 60 * 1000),
     hash: '0x7c9d2e1f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d',
     network: 'EVM',
   },
@@ -186,7 +189,7 @@ export default function TransactionHistory() {
               {/* Right Side */}
               <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
                 <StatusBadge status={tx.status} />
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                <span suppressHydrationWarning style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                   {formatTimeAgo(tx.timestamp)}
                 </span>
                 <a
